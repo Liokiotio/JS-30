@@ -62,12 +62,56 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
   </style>
 
   <script>
 
+    const secondHand = document.querySelector('.second-hand');
+    const minHand = document.querySelector(`.min-hand`);
+    const hourHand = document.querySelector(`.hour-hand`);
+    const oneMinute = 60000;
+    const oneSecond = 1000;
+    const oneHour = 3600000;
+
+    move(secondHand, 'second');
+    move(minHand, 'minute');
+    move(hourHand, 'hour');
+    setInterval(() => move(secondHand, 'second'), oneSecond);
+    setInterval(() => move(minHand, 'minute'), oneMinute);
+    setInterval(() => move(hourHand, 'hour'), oneHour);
+
+    function move(hand, time) {
+      const now = new Date();
+      let current;
+
+      switch (time) {
+        case 'second':
+          current = now.getSeconds();
+          break;
+
+        case 'minute':
+          current = now.getMinutes();
+          break;
+
+        case 'hour':
+          current = now.getHours();
+          break;
+
+        default:
+          console.error(`invalid time variable: ${time}`);
+          return;
+      }
+
+      const degrees = current / 60 * 360 + 90;
+
+      hand.style.transform = `rotate(${degrees}deg)`;
+    }
 
   </script>
 </body>
